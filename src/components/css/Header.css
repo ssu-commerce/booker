@@ -1,0 +1,12 @@
+#logo{
+    width: 35px;
+    height: 35px;
+}
+.account_link{
+    min-width: 70px;
+    color: #fff;
+}
+
+a {
+    text-decoration: none!important;
+}
