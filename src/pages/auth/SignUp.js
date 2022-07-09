@@ -1,8 +1,10 @@
 import {Button, Form} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import {checkLoginStatus, getUserId, postHttp, setTokens} from "../../utils/AuthHttpWrapper";
+import {getUserId, postHttp, setTokens} from "../../utils/AuthHttpWrapper";
+import {useNavigate} from "react-router-dom";
 
 const SignUp = (props) => {
+    let navigate = useNavigate();
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const onChangeId = e => setId(e.target.value);
@@ -13,25 +15,26 @@ const SignUp = (props) => {
         // eslint-disable-next-line
     }, []);
     const redirectHome = async () => {
-        let status = await checkLoginStatus();
-        if (status) {
+        if (props.loginStatus) {
+            navigate('/')
             alert("이미 로그인된 상태입니다.");
-            props.history.push('/')
         }
     };
     const signUp = async () => {
-        let responseData = await postHttp('/auth/sign-up', {
+        let responseData = await postHttp('/sign-up', {
             id: id,
             password: password,
         }).catch(error => {
             alert(error.response.data.message)
         });
         if (responseData !== undefined) {
+            console.log(responseData)
             await setTokens(responseData.data.accessToken, responseData.data.refreshToken);
             let userId = await getUserId();
+            console.log(userId)
             alert(userId + "님 반갑습니다.");
-            //props.setIsLogin(true)
-            props.history.push('/')
+            props.setIsLogin(true)
+            navigate('/')
         }
     };
 

@@ -2,7 +2,7 @@ import axios from 'axios';
 import cookie from 'react-cookies'
 import jwt_decode from "jwt-decode";
 
-export const API_BASE_URL = "https://ssu-commerce-auth.herokuapp.com";
+export const API_BASE_URL = "http://localhost:5555";
 
 export const getUserId = async () => cookie.load('userId');
 export const getUserRole = async () => cookie.load('userRole');
@@ -50,11 +50,12 @@ export const checkLoginStatus = async () => {
     return refreshToken !== undefined;
 };
 
+// TODO Refresh 로직 생각 필요
 const checkToken = async () => {
     let accessToken = await cookie.load('accessToken');
     let refreshToken = await cookie.load('refreshToken');
     if (refreshToken !== undefined) {
-        if (accessToken === undefined) {
+        if (jwt_decode(accessToken)) {
             await refreshAccessToken(refreshToken);
             accessToken = await cookie.load('accessToken');
         }
@@ -64,7 +65,7 @@ const checkToken = async () => {
 };
 
 const refreshAccessToken = async (refreshToken) => {
-    return await axios.post(API_BASE_URL + "/auth/refresh", {refreshToken: refreshToken})
+    return await axios.post(API_BASE_URL + "/refresh", {refreshToken: refreshToken})
         .then((response) => response.data.accessToken)
         .then((token) => setAccessToken(token))
         .catch(error => {
@@ -73,34 +74,25 @@ const refreshAccessToken = async (refreshToken) => {
 };
 
 const setAccessToken = (accessToken) => {
-    let decodedToken = jwt_decode(accessToken);
-    const accessTokenExpires = new Date(decodedToken.exp * 1000);
-    accessTokenExpires.setMinutes(accessTokenExpires.getMinutes() - 1, 0, 0)
-    cookie.save('userId', decodedToken.sub,
+    let decodedToken = jwt_decode(accessToken.token);
+    cookie.save('userId', decodedToken.id,
         {
             path: '/',
-            expires: accessTokenExpires
         });
-    cookie.save('userRole', decodedToken.roles,
+    cookie.save('userRole', decodedToken.roles[0],
         {
             path: '/',
-            expires: accessTokenExpires
-        });
-    cookie.save('nickName', decodedToken.nickName,
-        {
-            path: '/',
-            expires: accessTokenExpires
         });
     cookie.save('accessToken', accessToken,
         {
             path: '/',
-            expires: accessTokenExpires
             //secure: true
             //httpOnly: true
         });
 };
+
 const setRefreshToken = (refreshToken) => {
-    const refreshTokenExpires = new Date(jwt_decode(refreshToken).exp * 1000);
+    const refreshTokenExpires = new Date(jwt_decode(refreshToken.token).exp * 1000);
     refreshTokenExpires.setMinutes(refreshTokenExpires.getMinutes() - 1, 0, 0);
 
     cookie.save('refreshToken', refreshToken,
@@ -111,3 +103,10 @@ const setRefreshToken = (refreshToken) => {
             //httpOnly: true
         });
 };
+
+export const logoutAndDeleteCookies = () => {
+    cookie.remove("userId")
+    cookie.remove("userRole")
+    cookie.remove("accessToken")
+    cookie.remove("refreshToken")
+}
