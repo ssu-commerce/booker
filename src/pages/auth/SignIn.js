@@ -1,14 +1,13 @@
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {checkLoginStatus, getUserId, postHttp, setTokens} from "../../utils/AuthHttpWrapper";
-import {Button, Card, Form} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 
 const SignIn = (props) => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const onChangeId = e => setId(e.target.value);
     const onChangePassword = e => setPassword(e.target.value);
-    const logo = process.env.PUBLIC_URL + '/logo.png';
 
     useEffect(() => {
         redirectHome();
@@ -42,7 +41,7 @@ const SignIn = (props) => {
     }
 
     return (
-        <div style={{width: '50%', margin:'auto'}}>
+        <div style={{width: '50%', margin: 'auto'}}>
             <h1>로그인하기</h1><br/>
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail"

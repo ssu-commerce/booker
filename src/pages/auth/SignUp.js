@@ -1,5 +1,4 @@
 import {Button, Form} from "react-bootstrap";
-import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {checkLoginStatus, getUserId, postHttp, setTokens} from "../../utils/AuthHttpWrapper";
 
@@ -8,7 +7,6 @@ const SignUp = (props) => {
     const [password, setPassword] = useState("");
     const onChangeId = e => setId(e.target.value);
     const onChangePassword = e => setPassword(e.target.value);
-    const logo = process.env.PUBLIC_URL + '/logo.png';
 
     useEffect(() => {
         redirectHome();
@@ -40,8 +38,8 @@ const SignUp = (props) => {
     const onKeyPress = (e) => {
         if (e.key === 'Enter') signUp();
     }
-    return(
-        <div style={{width: '50%', margin:'auto'}}>
+    return (
+        <div style={{width: '50%', margin: 'auto'}}>
             <h1>회원가입하기</h1><br/>
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail"

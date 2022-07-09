@@ -1,9 +1,8 @@
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
 const Book = (props) => {
     let {id} = useParams();
-    const [book, setBook] = useState();
 
     useEffect(() => {
         const bookId = Number(id)
