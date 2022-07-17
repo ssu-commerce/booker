@@ -1,11 +1,14 @@
-import {useParams} from "react-router-dom";
+import {getHttp} from "../../utils/AuthHttpWrapper";
+import {useEffect} from "react";
 
 const Profile = (props) => {
-    let {id} = useParams();
-    console.log(id)
-    return(
+    useEffect(() => {
+        getHttp('/info')
+
+    }, [])
+    return (
         <div>
-            도서 상세페이지 ID = {id}
+            프로필
         </div>
     )
 }

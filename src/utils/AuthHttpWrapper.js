@@ -43,6 +43,7 @@ export const deleteHttp = async (url, config) => {
 export const setTokens = async (accessToken, refreshToken) => {
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
+    return true
 };
 
 export const checkLoginStatus = async () => {
@@ -50,26 +51,30 @@ export const checkLoginStatus = async () => {
     return refreshToken !== undefined;
 };
 
-// TODO Refresh 로직 생각 필요
 const checkToken = async () => {
     let accessToken = await cookie.load('accessToken');
     let refreshToken = await cookie.load('refreshToken');
     if (refreshToken !== undefined) {
         if (jwt_decode(accessToken)) {
-            await refreshAccessToken(refreshToken);
-            accessToken = await cookie.load('accessToken');
+            if (await refreshAccessToken(accessToken, refreshToken))
+                accessToken = await cookie.load('accessToken');
+            else {
+                logoutAndDeleteCookies()
+                delete axios.defaults.headers.common['Authorization'];
+                window.location.href = "/booker"
+            }
         }
         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     } else
         delete axios.defaults.headers.common['Authorization'];
 };
 
-const refreshAccessToken = async (refreshToken) => {
-    return await axios.post(API_BASE_URL + "/refresh", {refreshToken: refreshToken})
-        .then((response) => response.data.accessToken)
-        .then((token) => setAccessToken(token))
+const refreshAccessToken = async (accessToken, refreshToken) => {
+    return await axios.post(API_BASE_URL + "/refresh", {accessToken: accessToken, refreshToken: refreshToken})
+        .then((response) => setTokens(response.data.accessToken, response.data.refreshToken))
         .catch(error => {
-            console.log('error : ', error.response.data)
+            alert(error.response.data.message)
+            return false
         });
 };
 
@@ -83,7 +88,7 @@ const setAccessToken = (accessToken) => {
         {
             path: '/',
         });
-    cookie.save('accessToken', accessToken,
+    cookie.save('accessToken', accessToken.token,
         {
             path: '/',
             //secure: true
@@ -95,7 +100,7 @@ const setRefreshToken = (refreshToken) => {
     const refreshTokenExpires = new Date(jwt_decode(refreshToken.token).exp * 1000);
     refreshTokenExpires.setMinutes(refreshTokenExpires.getMinutes() - 1, 0, 0);
 
-    cookie.save('refreshToken', refreshToken,
+    cookie.save('refreshToken', refreshToken.token,
         {
             path: '/',
             expires: refreshTokenExpires,
@@ -105,8 +110,8 @@ const setRefreshToken = (refreshToken) => {
 };
 
 export const logoutAndDeleteCookies = () => {
-    cookie.remove("userId")
-    cookie.remove("userRole")
-    cookie.remove("accessToken")
-    cookie.remove("refreshToken")
+    cookie.remove("userId", {path: '/',})
+    cookie.remove("userRole", {path: '/',})
+    cookie.remove("accessToken", {path: '/',})
+    cookie.remove("refreshToken", {path: '/',})
 }

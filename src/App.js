@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/home/Home";
 import React, {useEffect, useState} from "react";
 import {checkLoginStatus} from "./utils/AuthHttpWrapper";
+import Profile from "./pages/user/Profile";
 
 function App() {
     const [loginStatus, setLoginStatus] = useState(false);
@@ -22,13 +23,14 @@ function App() {
     };
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
-            <Header loginStatus={loginStatus}/>
+            <Header loginStatus={loginStatus} setIsLogin={setLoginStatus}/>
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="sign-in" element={<SignIn loginStatus={loginStatus} setIsLogin={setLoginStatus}/>}/>
                 <Route path="sign-up" element={<SignUp loginStatus={loginStatus} setIsLogin={setLoginStatus}/>}/>
                 <Route path="books" element={<SignUp/>}/>
                 <Route path="books/:id" element={<Book/>}/>
+                <Route path="profile" element={<Profile/>}/>
             </Routes>
             <Footer/>
         </BrowserRouter>

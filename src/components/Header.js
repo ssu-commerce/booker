@@ -16,7 +16,7 @@ const Header = (props) => {
         if (props.loginStatus)
             return (
                 <div>
-                    <Link className="account_link" to="/my-page">My Page</Link>
+                    <Link className="account_link" to="/profile">My Page</Link>
                     <Link className="account_link" to="/" onClick={logout}>Logout</Link>
                 </div>
             )
