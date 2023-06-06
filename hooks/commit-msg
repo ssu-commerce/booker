@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys, os, re
+from subprocess import check_output
+
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+no_color='\033[0m'
+
+################ status enum
+def enum(*sequential, **named):
+    enums = dict(zip(sequential, range(len(sequential))), **named)
+    reverse = dict((value, key) for key, value in enums.iteritems())
+    enums['reverse_mapping'] = reverse
+    return type('Enum', (), enums)
+
+STATUS = enum('TITLE', 'DESC', 'MSG_FORM')
+commit_msg = '''[[Your Commit Message]]'''
+title_msg = '''%s[type] title message 를 적어주세요%s
+%s[type] 종류 : [feat], [fix], [docs], [refactor], [test], [chore]%s
+%stitle은 최소 한글자 이상 입력 되어야 합니다.%s
+%sex) [feat] 신규 기능 추가%s
+''' % (yellow, no_color, yellow, no_color, yellow, no_color, yellow, no_color)
+desc_msg = '''%sCommit의 설명 message 적어 주세요. '[]' 대괄호로 시작할 수 없습니다.%s
+%sex) 신규 기능 추가%s
+''' % (yellow, no_color, yellow, no_color)
+sample_msg = '''%s[[Sample Commit Message]]%s\n[feat] 신규 API추가
+개발용 신규 API추가
+example_api, 예제_api 추가\n''' % (yellow, no_color)
+
+# current state
+state = STATUS.TITLE
+
+################ reject function
+def reject(arg, arg2):
+    msg = ''
+    print '%s%s%s' % (yellow, arg2, no_color)
+    print '\n%s[[Invalid Commit Message hooked by Commit-Msg Hook]]%s' % (red, no_color)
+    msg = STATUS.reverse_mapping[arg]
+    print '%sYour commit msg is rejected because of invalid [%s] type. %s' % (red, msg, no_color)
+    print '%sPlease modify the commit message and retry. %s' % (red, no_color)
+    print '%sYou can use "$git commit --amend"  command. %s \n' % (red, no_color)
+
+    if arg == STATUS.TITLE:
+        print '%s' % (title_msg)
+    elif arg == STATUS.DESC:
+        print '%s' % (desc_msg)
+    else:
+        print '%s' % (sample_msg)
+    print
+
+    sys.exit(1)
+
+#################################################################################
+#prefix type
+prefix_list = ['[feat]', '[fix]', '[docs]', '[refactor]', '[test]', '[chore]']
+prefix_ims = '[IMS]'
+#################################################################################
+
+commit_msg_filepath = sys.argv[1]
+
+with open(commit_msg_filepath, 'r') as f:
+    lines = f.readlines()
+    print '%s%s%s' % (green, commit_msg, no_color)
+    for line in lines:
+        if bool(line.startswith('#')) == False and line != '\n' and line != '':
+            if line.find('Merge branch') > -1:
+                print '%s%s%s' % (green, line.rstrip('\n'), no_color)
+                sys.exit(0)
+            if state == STATUS.MSG_FORM:
+                reject(state, line)
+            result = re.match('(\[.*\])(.*)', line)
+            if result != None:
+                subject = result.group(1)
+                content = result.group(2)
+                if state == STATUS.TITLE:
+                    if subject in prefix_list:
+                        if content == '':
+                            reject(state, line)
+                    else:
+                        reject(state, line)
+                    state = STATUS.DESC
+            else:
+                if state == STATUS.TITLE:
+                    reject(state, line)
+                else:
+                    state = STATUS.DESC
+            print '%s%s%s' % (green, line.rstrip('\n'), no_color)
+
+    if state != STATUS.MSG_FORM:
+        reject(state, '')

@@ -1,0 +1,42 @@
+{
+    "extends": "stylelint-config-sass-guidelines",
+    "plugins": [
+        "stylelint-scss"
+    ],
+    "rules": {
+        "function-url-quotes": [
+            "always",
+            {
+                "except": [
+                    "empty"
+                ]
+            }
+        ],
+        "scss/selector-nest-combinators": "always",
+        "scss/selector-no-redundant-nesting-selector": true,
+        "function-parentheses-space-inside": "never-single-line",
+        "max-nesting-depth": [
+            2,
+            {
+                "ignore": [
+                    "pseudo-classes"
+                ]
+            }
+        ],
+        "selector-class-pattern": [
+            "^([l|a|r|w|d|p]|ewr|col|row)-(?:[a-z][a-z0-9]+)*(?:-[a-z0-9][a-z0-9_]+)*?(?:--[a-z0-9-_]+)*?$|^(app|type)-([a|r|w|d|p]|ewr|col|row)-(?:[a-z][a-z0-9]+)*(?:-[a-z0-9][a-z0-9]+)*?--[a-z0-9_]+$",
+            {
+                "message": "Class names should match the SUIT CSS naming convention"
+            }
+        ],
+        "selector-max-universal": 0,
+        "selector-no-qualifying-type": [
+            true,
+            {
+                "ignore": [
+                    "attribute"
+                ]
+            }
+        ]
+    }
+}
