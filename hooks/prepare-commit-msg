@@ -41,19 +41,11 @@ sample_msg = '''# Commit Messge의 형식은:
 # - DESC -:
 #  - 해당 Commit에 대한 자세한 설명을 기록합니다.:
 #
-# - IMS -:
-#  - IMS 이슈 번호를 명시하거나 없을 경우 N/A를 기록합니다:
-#
 # [[Sample Commit Message]]
 # [feat] 신규 API추가
 # 개발용 신규 API추가
 # example_api, 예제_api 추가
-# [IMS] : N/A or 123456
 #'''
-
-print(commit_msg_filepath)
-print(commit_type)
-print(commit_hash)
 
 if commit_type.find('message') < 0:
 	with io.open(commit_msg_filepath, 'rt', encoding='UTF8') as f:

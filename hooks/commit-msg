@@ -56,7 +56,6 @@ def reject(arg, arg2):
 #################################################################################
 #prefix type
 prefix_list = ['[feat]', '[fix]', '[docs]', '[refactor]', '[test]', '[chore]']
-prefix_ims = '[IMS]'
 #################################################################################
 
 commit_msg_filepath = sys.argv[1]
@@ -69,8 +68,8 @@ with open(commit_msg_filepath, 'r') as f:
             if line.find('Merge branch') > -1:
                 print '%s%s%s' % (green, line.rstrip('\n'), no_color)
                 sys.exit(0)
-            if state == STATUS.MSG_FORM:
-                reject(state, line)
+            # if state == STATUS.MSG_FORM:
+            #     reject(state, line)
             result = re.match('(\[.*\])(.*)', line)
             if result != None:
                 subject = result.group(1)
@@ -89,5 +88,5 @@ with open(commit_msg_filepath, 'r') as f:
                     state = STATUS.DESC
             print '%s%s%s' % (green, line.rstrip('\n'), no_color)
 
-    if state != STATUS.MSG_FORM:
+    if state != STATUS.DESC:
         reject(state, '')
