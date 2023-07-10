@@ -4,15 +4,15 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'babel'],
   extends: [
-    'airbnb', // airbnb style guide Àû¿ë
+    'airbnb', // airbnb style guide ì ìš©
     'airbnb/hooks',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
-  ignorePatterns: ['stories/', 'node_modules/', 'src/module/'], // lint Àû¿ë Á¦¿Ü°æ·Î
+  ignorePatterns: ['stories/', 'node_modules/', 'src/module/'], // lint ì ìš© ì œì™¸ê²½ë¡œ
   settings: {
     'import/resolver': {
-      // import path °ü·Ã
+      // import path ê´€ë ¨
       node: {
         extensions: ['js', '.jsx', '.ts', '.tsx'],
         moduleDirectory: ['node_modules', 'src/'],
@@ -35,14 +35,14 @@ module.exports = {
       }
     ],
     'react/jsx-filename-extension': [
-      // tsx ÀÎ½Ä
+      // tsx ì¸ì‹
       1,
       {
         extensions: ['.tsx'],
       },
     ],
     'import/no-extraneous-dependencies': [
-      // dependencies ¹«½Ã
+      // dependencies ë¬´ì‹œ
       'error',
       {
         devDependencies: true,
@@ -50,37 +50,37 @@ module.exports = {
     ],
     'react/jsx-one-expression-per-line': 0,
     'react/state-in-constructor': 0,
-    'react-hooks/exhaustive-deps': 0, // useEffectÀÇ dependency list¿¡ [] »ç¿ë °¡´É
+    'react-hooks/exhaustive-deps': 0, // useEffectì˜ dependency listì— [] ì‚¬ìš© ê°€ëŠ¥
     'prettier/prettier': [
       'error',
       {
-        // ¹®ÀÚ¿­Àº µû¿ÈÇ¥·Î formatting
+        // ë¬¸ìì—´ì€ ë”°ì˜´í‘œë¡œ formatting
         singleQuote: true,
-        // ÄÚµå ¸¶Áö¸·¿¡ ¼¼¹ÌÄİ¸¥ÀÌ ÀÖ°Ô formatting
+        // ì½”ë“œ ë§ˆì§€ë§‰ì— ì„¸ë¯¸ì½œë¥¸ì´ ìˆê²Œ formatting
         semi: true,
-        // ÅÇÀÇ »ç¿ëÀ» ±İÇÏ°í ½ºÆäÀÌ½º¹Ù »ç¿ëÀ¸·Î ´ëÃ¼ÇÏ°Ô formatting
+        // íƒ­ì˜ ì‚¬ìš©ì„ ê¸ˆí•˜ê³  ìŠ¤í˜ì´ìŠ¤ë°” ì‚¬ìš©ìœ¼ë¡œ ëŒ€ì²´í•˜ê²Œ formatting
         useTabs: false,
-        // µé¿©¾²±â ³Êºñ´Â 2Ä­
+        // ë“¤ì—¬ì“°ê¸° ë„ˆë¹„ëŠ” 2ì¹¸
         tabWidth: 2,
-        // ÀÚ¼¼ÇÑ ¼³¸íÀº ±¸±Û¸µÀÌ Â¯ÀÌ±äÇÏ³ª °´Ã¼³ª ¹è¿­ Å°:°ª µÚ¿¡ Ç×»ó ÄŞ¸¶¸¦ ºÙÈ÷µµ·Ï formatting
+        // ìì„¸í•œ ì„¤ëª…ì€ êµ¬ê¸€ë§ì´ ì§±ì´ê¸´í•˜ë‚˜ ê°ì²´ë‚˜ ë°°ì—´ í‚¤:ê°’ ë’¤ì— í•­ìƒ ì½¤ë§ˆë¥¼ ë¶™íˆë„ë¡ formatting
         trailingComma: 'es5',
-        // ÄÚµå ÇÑÁÙÀÌ maximum 100Ä­
+        // ì½”ë“œ í•œì¤„ì´ maximum 100ì¹¸
         printWidth: 100,
-        // È­»ìÇ¥ ÇÔ¼ö°¡ ÇÏ³ªÀÇ ¸Å°³º¯¼ö¸¦ ¹ŞÀ» ¶§ °ıÈ£¸¦ »ı·«ÇÏ°Ô formatting
+        // í™”ì‚´í‘œ í•¨ìˆ˜ê°€ í•˜ë‚˜ì˜ ë§¤ê°œë³€ìˆ˜ë¥¼ ë°›ì„ ë•Œ ê´„í˜¸ë¥¼ ìƒëµí•˜ê²Œ formatting
         arrowParens: 'avoid',
         // "parser": 'typescript',
-        // platform¿¡ µû¸¥ line ending sequence ¼³Á¤ ¹«½Ã
+        // platformì— ë”°ë¥¸ line ending sequence ì„¤ì • ë¬´ì‹œ
         endOfLine: 'auto',
       },
     ],
     'no-unused-expressions': 'off',
     'babel/no-unused-expressions': 'error',
-    'class-methods-use-this': 'off', // class method ¿¡¼­ this ÇÊ¼ö Á¢±Ù ¹«½Ã
-    '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }], // ...args: any[] ´Â ¹«½Ã
-    // eslint/no-shadow ´ë½Å ts eslint »ç¿ë
+    'class-methods-use-this': 'off', // class method ì—ì„œ this í•„ìˆ˜ ì ‘ê·¼ ë¬´ì‹œ
+    '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }], // ...args: any[] ëŠ” ë¬´ì‹œ
+    // eslint/no-shadow ëŒ€ì‹  ts eslint ì‚¬ìš©
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': ['error'],
-    // eslint/no-use-before-define ´ë½Å ts eslint »ç¿ë
+    // eslint/no-use-before-define ëŒ€ì‹  ts eslint ì‚¬ìš©
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
   },
