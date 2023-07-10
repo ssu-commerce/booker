@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys, os, re, io 
+#from subprocess import check_output
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+commit_msg_filepath = sys.argv[1]
+if len(sys.argv) > 2:
+    commit_type = sys.argv[2]
+else:
+    commit_type = ''
+    if len(sys.argv) > 3:
+        commit_hash = sys.argv[3]
+    else:
+        commit_hash = ''
+
+pre_msg = '''[feat]
+- DESC
+
+#
+# 위의 예제 Commit Message의 사용하시면 됩니다.:
+'''
+sample_msg = '''# Commit Messge의 형식은:
+# - TITLE:
+# - DESC:
+# - IMS:
+# 으로 이루어져 있습니다.:
+#
+# - TITLE -:
+#  - 해당 Commit이 어떤 Type의 Commit인지 명시하고, 제목을 정합니다.:
+#  - Commit Type:
+#  -- [feat] '새 기능 추가':
+#  -- [bugfix] '버그 수정 이슈':
+#  -- [docs] 'README나 주석 등에 대한 수정':
+#  -- [refactor] 'Code refactoring 수정 사항':
+#  -- [test] '제품에 영향이 없는 test code':
+#  -- [chore] 'cmake, config file 등에 대한 수정':
+#
+# - DESC -:
+#  - 해당 Commit에 대한 자세한 설명을 기록합니다.:
+#
+# [[Sample Commit Message]]
+# [feat] 신규 API추가
+# 개발용 신규 API추가
+# example_api, 예제_api 추가
+#'''
+
+if commit_type.find('message') < 0:
+	with io.open(commit_msg_filepath, 'rt', encoding='UTF8') as f:
+            s = f.read()
+            f.close
+            if len(sys.argv) > 2:
+                with io.open(commit_msg_filepath, 'w') as f:
+                    f.write(s.decode('utf-8'))
+                    f.write("%s" % sample_msg.decode('utf-8'))
+            else:
+                with io.open(commit_msg_filepath, 'w') as f:
+                    f.write("%s" % pre_msg.decode('utf-8'))
+                    f.write("%s" % sample_msg.decode('utf-8'))
+                    f.write("%s" % commit_msg_filepath.decode('utf-8'))
+                    f.write(s.decode('utf-8'))
+            f.close
+#white_space_command = "git diff-index --check --cached HEAD --"
+#ret = os.system(white_space_command)
+#if ret:
+#    exit(1)
